@@ -45,7 +45,6 @@ namespace Scraping
                 var parser = new HtmlParser();
                 document = await parser.ParseDocumentAsync(stream);
             }
-            
         }
     }
 }
