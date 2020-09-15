@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Net.Http;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using System.Data;
 
 namespace Scraping
 {
@@ -23,20 +24,32 @@ namespace Scraping
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        static int month = DateTime.Today.Month;
+        static readonly DataTable dataTable = new DataTable();
         public MainWindow()
         {
             InitializeComponent();
-            var month = DateTime.Today.Month;
-            monthText.Text = $"{month}月発売";
+            dataTable.Columns.Clear();
+            dataTable.Rows.Clear();
+            dataTable.Columns.Add("発売日");
+            dataTable.Columns.Add("タイトル");
+            dataTable.Columns.Add("著者");
+            //Start();
         }
+
+        static async void Start()
+        {
+            var title = await WebData.GetString();
+            var row = dataTable.NewRow();
+            row[0] = title;
+        }
+        public DataView DataTableView => new DataView(dataTable);
     }
 
     class WebData
     {
         static HttpClient client = new HttpClient();
-        public string[] StringData { get; set; }
-        public async Task GetString(int month)
+        public static async Task<string> GetString()
         {
             var urlstring = @"http://yurinavi.com/yuri-calendar/";
             var document = default(IHtmlDocument);
@@ -45,6 +58,7 @@ namespace Scraping
                 var parser = new HtmlParser();
                 document = await parser.ParseDocumentAsync(stream);
             }
+            return document.Title;
         }
     }
 }
