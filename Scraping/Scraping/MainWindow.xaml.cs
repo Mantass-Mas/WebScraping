@@ -16,6 +16,7 @@ using System.Net.Http;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using System.Data;
+using System.ComponentModel;
 
 namespace Scraping
 {
@@ -34,7 +35,14 @@ namespace Scraping
             dataTable.Columns.Add("発売日");
             dataTable.Columns.Add("タイトル");
             dataTable.Columns.Add("著者");
+            NotifyTableUpdate();
             //Start();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         static async void Start()
@@ -44,6 +52,12 @@ namespace Scraping
             row[0] = title;
         }
         public DataView DataTableView => new DataView(dataTable);
+
+        private void NotifyTableUpdate()
+        {
+            OnPropertyChanged(nameof(DataTableView));
+        }
+
     }
 
     class WebData
