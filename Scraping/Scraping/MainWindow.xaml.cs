@@ -30,6 +30,11 @@ namespace Scraping
             var month = DateTime.Today.Month;
             monthText.Text = $"{month}月発売";
         }
+
+        static void WindowCreate()
+        {
+
+        }
     }
 
     class WebData
