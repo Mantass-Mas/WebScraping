@@ -33,14 +33,39 @@ namespace Scraping
                 {
                     if (date.TextContent.Substring(0, 1) != "▼")
                     {
-                        text += date.TextContent + books[count].TextContent + "\n";
-                        count++;
+                        var dateArray = date.TextContent.Split('\n');
+                        var bookData = books[count].TextContent.Split('\n');
+                        if (bookData.Length == 2)
+                        {
+                            var title = bookData[0];
+                            var author = bookData[1];
+                            text += $"{dateArray[0]}({dateArray[1]})\nタイトル:{title}/著者:{author}\n";
+                            count++;
+                        }
+                        else
+                        {
+                            var title = bookData[0];
+                            text += $"{dateArray[0]}({dateArray[1]})\nタイトル:{title}\n";
+                            count++;
+                        }
                     }
                 }
                 else
                 {
-                    text += date.TextContent + books[count].TextContent + "\n";
-                    count++;
+                    var bookData = books[count].TextContent.Split('\n');
+                    if(bookData.Length == 2)
+                    {
+                        var title = bookData[0];
+                        var author = bookData[1];
+                        text += $"タイトル:{title}/著者:{author}\n";
+                        count++;
+                    }
+                    else
+                    {
+                        var title = bookData[0];
+                        text += $"タイトル:{title}\n";
+                        count++;
+                    }
                 }
             }
             return text;
