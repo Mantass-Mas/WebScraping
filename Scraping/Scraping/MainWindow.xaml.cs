@@ -21,11 +21,16 @@ namespace Scraping
     /// </summary>
     public partial class MainWindow : Window
     {
-
         public MainWindow()
         {
             InitializeComponent();
+            InitialWindow();
+        }
 
+        public async void InitialWindow()
+        {
+            var webScraping = new WebScraping();
+            textBlock.Text = await webScraping.GetWebDataAsync();
         }
     }
 }

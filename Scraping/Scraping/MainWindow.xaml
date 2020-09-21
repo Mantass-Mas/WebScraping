@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <DataGrid x:Name="dataGrid"/>
-        <TextBlock x:Name="textBlock"/>
+        <ScrollViewer>
+            <!--DataGrid x:Name="dataGrid"/-->
+            <TextBlock x:Name="textBlock"/>
+        </ScrollViewer>
     </Grid>
 </Window>
