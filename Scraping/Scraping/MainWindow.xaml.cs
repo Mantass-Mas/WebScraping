@@ -30,7 +30,7 @@ namespace Scraping
         public async void InitialWindow()
         {
             var webScraping = new WebScraping();
-            textBlock.Text = await webScraping.GetWebDataAsync();
+            dataGrid.ItemsSource = await webScraping.GetWebDataAsync();
         }
     }
 }
