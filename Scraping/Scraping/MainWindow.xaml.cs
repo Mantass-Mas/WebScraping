@@ -51,5 +51,10 @@ namespace Scraping
                 }
             }
         }
+
+        private void dataGrid_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
