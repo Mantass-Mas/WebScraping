@@ -52,9 +52,10 @@ namespace Scraping
             }
         }
 
-        private void dataGrid_Selected(object sender, RoutedEventArgs e)
+        private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-
+            var window = new RegisterDialog();
+            bool? res = window.ShowDialog();
         }
     }
 }

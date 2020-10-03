@@ -75,12 +75,19 @@
     <Compile Include="MyBookWindow.xaml.cs">
       <DependentUpon>MyBookWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RegisterDialog.xaml.cs">
+      <DependentUpon>RegisterDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WebScraping.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MyBookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RegisterDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
