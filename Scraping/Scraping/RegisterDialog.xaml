@@ -14,8 +14,8 @@
         <TextBlock x:Name="RegisterContent" Text="Sample" Margin="30" VerticalAlignment="Top" HorizontalAlignment="Center"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="登録する" Width="80" Margin="10" IsDefault="True" Click="Button_Click"/>
-            <Button Content="キャンセル" Width="80" Margin="10" IsCancel="True" Click="Button_Click_1"/>
+            <Button Content="登録する" Width="80" Margin="10" IsDefault="True" Click="Register_Button_Click"/>
+            <Button Content="キャンセル" Width="80" Margin="10" IsCancel="True" Click="Cancel_Button_Click"/>
         </StackPanel>
 
     </Grid>

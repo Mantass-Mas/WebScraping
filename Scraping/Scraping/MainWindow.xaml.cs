@@ -29,12 +29,20 @@ namespace Scraping
 
         public async void InitialWindow()
         {
+            /// <summary>
+            /// Webスクレイピングを非同期処理で行い、
+            /// DataGrid.ItemSourceにバインドする
+            /// </summary>
             var webScraping = new WebScraping();
             dataGrid.ItemsSource = await webScraping.GetWebDataAsync();
         }
 
         private void DataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
+            /// <summary>
+            /// DataGrid上でマウスホイールのスクロールイベントが発生したとき、
+            /// 親要素のScrollViewerをスクロールさせる
+            /// </summary>
             if(sender is DataGrid)
             {
                 var element = sender as UIElement;
@@ -54,8 +62,22 @@ namespace Scraping
 
         private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            var window = new RegisterDialog();
-            bool? res = window.ShowDialog();
+            var dataGrid = sender as DataGrid;
+
+            /// <summary>
+            /// DataGridのタイトルセルが選択されたとき、
+            /// MyBook登録確認ダイアログを表示
+            /// </summary>
+            if (dataGrid.CurrentColumn.Header.ToString() == "Title")
+            {
+                if(dataGrid.CurrentCell != null)
+                {
+                    //var dialog_text = dataGrid.CurrentColumn.GetCellContent(dataGrid.SelectedItem);
+                    var window = new RegisterDialog();
+                    //window.RegisterContent.Text = dialog_text;
+                    bool? res = window.ShowDialog();
+                }
+            }
         }
     }
 }

@@ -10,7 +10,7 @@
         <StackPanel>
             <TextBlock x:Name="textBlock" Text="一覧" FontSize="20" Margin="10,10" FontWeight="Bold" HorizontalAlignment="Left"/>
             <Button x:Name="myBookButton" Content="MyBookを表示" Margin="10,0,0,10" Width="100" HorizontalAlignment="Left"/>
-            <DataGrid x:Name="dataGrid" ScrollViewer.VerticalScrollBarVisibility="Disabled" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectedCellsChanged="dataGrid_SelectedCellsChanged"/>
+            <DataGrid x:Name="dataGrid" ScrollViewer.VerticalScrollBarVisibility="Disabled" SelectionUnit="Cell" PreviewMouseWheel="DataGrid_PreviewMouseWheel" SelectedCellsChanged="dataGrid_SelectedCellsChanged"/>
         </StackPanel>
     </ScrollViewer>
 </Window>

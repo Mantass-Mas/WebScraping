@@ -17,6 +17,9 @@ namespace Scraping
 
         public async Task<ObservableCollection<WebData>> GetWebDataAsync()
         {
+            /// <summary>
+            /// スクレイピングを行うWebSiteのデータを取得する
+            /// </summary>
             var urlstring = @"http://yurinavi.com/yuri-calendar/";
             var document = default(IHtmlDocument);
             using (var stream = await client.GetStreamAsync(urlstring))
@@ -24,8 +27,17 @@ namespace Scraping
                 var parser = new HtmlParser();
                 document = await parser.ParseDocumentAsync(stream);
             }
+
+            /// <summary>
+            /// クエリセレクターを利用して必要な情報を抽出
+            /// </summary>
             var dates = document.QuerySelectorAll(@"td.column-1:not(#tablepress-152 > tbody > tr > td)");
             var books = document.QuerySelectorAll(@"td.column-3");
+
+            /// <summary>
+            /// DataGridに表示する形式に条件分岐を利用しながら、
+            /// ObservableCollectionに格納していく
+            /// </summary>
             var count = 0;
             var data = new ObservableCollection<WebData>();
             foreach(var date in dates)
