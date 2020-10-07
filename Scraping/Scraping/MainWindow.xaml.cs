@@ -72,9 +72,9 @@ namespace Scraping
             {
                 if(dataGrid.CurrentCell != null)
                 {
-                    //var dialog_text = dataGrid.CurrentColumn.GetCellContent(dataGrid.SelectedItem);
+                    var cell = dataGrid.CurrentColumn.GetCellContent(dataGrid.CurrentItem) as TextBlock;
                     var window = new RegisterDialog();
-                    //window.RegisterContent.Text = dialog_text;
+                    window.RegisterContent.Text = cell.Text;
                     bool? res = window.ShowDialog();
                 }
             }
