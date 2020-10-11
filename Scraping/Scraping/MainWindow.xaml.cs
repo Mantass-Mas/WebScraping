@@ -72,9 +72,23 @@ namespace Scraping
             {
                 if(dataGrid.CurrentCell != null)
                 {
+                    //選択されたセルから純粋にタイトルのみを抽出する
                     var cell = dataGrid.CurrentColumn.GetCellContent(dataGrid.CurrentItem) as TextBlock;
+                    var cell_text = cell.Text;
+                    cell_text = cell_text.Trim(' ', '(', ')');
+                    //var comic_num = 0;
+                    var end = cell_text[cell_text.Length - 1].ToString();
+                    var isNum = int.TryParse(end, out var num);
+                    while (isNum)
+                    {
+                        cell_text = cell_text.Remove(cell_text.Length - 1, 1);
+                        end = cell_text[cell_text.Length - 1].ToString();
+                        isNum = int.TryParse(end, out num);
+                    }
+                    cell_text = cell_text.Trim(' ', '(', ')');
+                    var content = cell_text;
                     var window = new RegisterDialog();
-                    window.RegisterContent.Text = cell.Text;
+                    window.RegisterContent.Text = content;
                     bool? res = window.ShowDialog();
                 }
             }
