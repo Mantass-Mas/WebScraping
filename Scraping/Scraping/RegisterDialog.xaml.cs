@@ -26,12 +26,12 @@ namespace Scraping
 
         private void Register_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogResult = true;
         }
 
         private void Cancel_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogResult = false;
         }
     }
 }
