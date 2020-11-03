@@ -85,14 +85,15 @@ namespace Scraping
                         end = cell_text[cell_text.Length - 1].ToString();
                         isNum = int.TryParse(end, out num);
                     }
-                    var content = cell_text.Trim(' ', '(', ')');
+                    var title = cell_text.Trim(' ', '(', ')');
                     var window = new RegisterDialog();
-                    window.RegisterContent.Text = content;
+                    window.RegisterContent.Text = title;
                     bool? res = window.ShowDialog();
                     //MyBook登録確認ダイアログで登録が押された場合はtrueが返ってくる
                     if(res == true)
                     {
-                        //MyBook.txtにタイトルを書き込む処理
+                        //MyBooksにタイトルを追加
+                        Registered(title);
                     }
                 }
             }

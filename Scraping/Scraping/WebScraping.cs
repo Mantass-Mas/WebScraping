@@ -105,11 +105,4 @@ namespace Scraping
             return data;
         }
     }
-
-    class WebData
-    {
-        public string ReleaseDate { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-    }
 }
