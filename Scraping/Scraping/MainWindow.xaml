@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Scraping"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="百合漫画　発売日" Height="500" Width="900">
+    <ScrollViewer>
+        <StackPanel>
+            <TextBlock x:Name="viewStatus" Text="" FontSize="20" Margin="10,10" FontWeight="Bold" HorizontalAlignment="Left"/>
+            <Button x:Name="viewChangeButton" Content="" Margin="10,0,0,10" Width="100" HorizontalAlignment="Left"/>
+            <DataGrid x:Name="dataGrid"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      PreviewMouseWheel="DataGrid_PreviewMouseWheel"/>
+        </StackPanel>
+    </ScrollViewer>
 </Window>

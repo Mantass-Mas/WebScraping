@@ -24,5 +24,23 @@ namespace Scraping
         {
             InitializeComponent();
         }
+        private void DataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (sender is DataGrid)
+            {
+                var element = sender as UIElement;
+
+                while (element != null)
+                {
+                    if (element is ScrollViewer)
+                    {
+                        var viewer = (ScrollViewer)element;
+                        viewer.ScrollToVerticalOffset(viewer.VerticalOffset - e.Delta / 3);
+                        return;
+                    }
+                    element = VisualTreeHelper.GetParent(element) as UIElement;
+                }
+            }
+        }
     }
 }
