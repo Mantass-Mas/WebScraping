@@ -23,6 +23,8 @@ namespace Scraping
         public MainWindow()
         {
             InitializeComponent();
+            var vm = new ViewModel();
+            DataContext = vm;
         }
         private void DataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {

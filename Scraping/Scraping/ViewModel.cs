@@ -8,40 +8,87 @@ using System.Collections.ObjectModel;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 
 namespace Scraping
 {
-    class ViewModel : INotifyPropertyChanged
+    class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public void NotifyPropertyChanged(string PropertyName)
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            var e = new PropertyChangedEventArgs(PropertyName);
-            PropertyChanged?.Invoke(this, e);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+    class ViewModel : ViewModelBase
+    {
         /// <summary>
         /// すべての本のリスト
         /// </summary>
-        public ObservableCollection<Book> BookList { get; set; } = new ObservableCollection<Book>();
+        private List<Book> _bookList = new List<Book>();
         /// <summary>
         /// お気に入り登録した本のリスト
         /// </summary>
-        public ObservableCollection<Book> FavoriteList { get; set; } = new ObservableCollection<Book>();
+        private List<Book> _favoriteList = new List<Book>();
         /// <summary>
         /// お気に入り表示かどうか
         /// </summary>
-        private bool _FavoriteView = false;
+        private bool _favoriteView;
         public bool FavorateView
         {
             get
             {
-                return _FavoriteView;
+                return _favoriteView;
             }
             set
             {
-                _FavoriteView = value;
-                NotifyPropertyChanged(nameof(FavorateView));
+                _favoriteView = value;
+                NotifyPropertyChanged();
             }
+        }
+        /// <summary>
+        /// データバインド用のリスト
+        /// </summary>
+        public ObservableCollection<Book> ViewList { get; set; }
+        /// <summary>
+        /// ボタンテキスト用
+        /// </summary>
+        private string _buttonText;
+        public string ButtonText
+        {
+            get
+            {
+                return _buttonText;
+            }
+            set
+            {
+                _buttonText = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private string _headerText;
+        public string HeaderText
+        {
+            get
+            {
+                return _headerText;
+            }
+            set
+            {
+                _headerText = value;
+                NotifyPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// コンストラクター
+        /// </summary>
+        public ViewModel()
+        {
+            _bookList = WebScraping.GetWebData();
+            _favoriteView = false;
+            _headerText = "全表示";
+            _buttonText = "お気に入り表示に切り替え";
+            ViewList = new ObservableCollection<Book>(_bookList);
         }
     }
     public class Book
@@ -57,19 +104,19 @@ namespace Scraping
     {
         static HttpClient client = new HttpClient();
 
-        public async Task<ObservableCollection<Book>> GetWebData()
+        public static List<Book> GetWebData()
         {
             var urlstring = @"http://yurinavi.com/yuri-calendar/";
             var document = default(IHtmlDocument);
-            using (var stream = await client.GetStreamAsync(urlstring))
+            using (var stream = client.GetStreamAsync(urlstring).Result)
             {
                 var parser = new HtmlParser();
-                document = await parser.ParseDocumentAsync(stream);
+                document = parser.ParseDocumentAsync(stream).Result;
             }
             var dates = document.QuerySelectorAll(@"td.column-1:not(#tablepress-152 > tbody > tr > td)");
             var books = document.QuerySelectorAll(@"td.column-3");
             var count = 0;
-            var data = new ObservableCollection<Book>();
+            var data = new List<Book>();
             foreach (var date in dates)
             {
                 if (date.TextContent != "")
