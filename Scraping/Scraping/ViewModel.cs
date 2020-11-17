@@ -9,10 +9,11 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Scraping
 {
-    class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -20,7 +21,7 @@ namespace Scraping
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-    class ViewModel : ViewModelBase
+    public class ViewModel : ViewModelBase
     {
         /// <summary>
         /// すべての本のリスト
@@ -34,7 +35,7 @@ namespace Scraping
         /// お気に入り表示かどうか
         /// </summary>
         private bool _favoriteView;
-        public bool FavorateView
+        public bool FavoriteView
         {
             get
             {
@@ -49,7 +50,19 @@ namespace Scraping
         /// <summary>
         /// データバインド用のリスト
         /// </summary>
-        public ObservableCollection<Book> ViewList { get; set; }
+        private ObservableCollection<Book> _viewList;
+        public ObservableCollection<Book> ViewList
+        {
+            get
+            {
+                return _viewList;
+            }
+            set
+            {
+                _viewList = value;
+                NotifyPropertyChanged();
+            }
+        }
         /// <summary>
         /// ボタンテキスト用
         /// </summary>
@@ -80,15 +93,58 @@ namespace Scraping
             }
         }
         /// <summary>
+        /// 表示方法変更ボタンクリック用のコマンド
+        /// </summary>
+        public ICommand ButtonClick { get; set; }
+        /// <summary>
         /// コンストラクター
         /// </summary>
         public ViewModel()
         {
             _bookList = WebScraping.GetWebData();
-            _favoriteView = false;
-            _headerText = "全表示";
-            _buttonText = "お気に入り表示に切り替え";
-            ViewList = new ObservableCollection<Book>(_bookList);
+            ButtonClick = new ButtonClickCommand(this);
+            FavoriteView = false;
+            SetData();
+        }
+        public void SetData()
+        {
+            if (FavoriteView)
+            {
+                HeaderText = "お気に入り表示";
+                ButtonText = "全表示に切り替え";
+                ViewList = new ObservableCollection<Book>(_favoriteList);
+            }
+            else
+            {
+                HeaderText = "全表示";
+                ButtonText = "お気に入り表示に切り替え";
+                ViewList = new ObservableCollection<Book>(_bookList);
+            }
+        }
+    }
+    public class ButtonClickCommand : ICommand
+    {
+        private ViewModel _vm;
+        public event EventHandler CanExecuteChanged;
+        public ButtonClickCommand(ViewModel viewModel)
+        {
+            _vm = viewModel;
+        }
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+        public void Execute(object parameter)
+        {
+            if (_vm.FavoriteView)
+            {
+                _vm.FavoriteView = false;
+            }
+            else
+            {
+                _vm.FavoriteView = true;
+            }
+            _vm.SetData();
         }
     }
     public class Book

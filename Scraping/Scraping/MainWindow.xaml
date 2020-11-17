@@ -9,7 +9,7 @@
     <ScrollViewer>
         <StackPanel>
             <TextBlock x:Name="viewStatus" Text="{Binding HeaderText}" FontSize="20" Margin="10,10" FontWeight="Bold" HorizontalAlignment="Left"/>
-            <Button x:Name="viewChangeButton" Content="{Binding ButtonText}" Margin="10,0,0,10" Width="150" HorizontalAlignment="Left"/>
+            <Button x:Name="viewChangeButton" Content="{Binding ButtonText}" Margin="10,0,0,10" Width="150" HorizontalAlignment="Left" Command="{Binding ButtonClick}"/>
             <DataGrid x:Name="dataGrid"
                       ItemsSource="{Binding ViewList}"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
