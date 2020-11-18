@@ -13,6 +13,8 @@
             <DataGrid x:Name="dataGrid"
                       ItemsSource="{Binding ViewList}"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      SelectionUnit="Cell"
+                      SelectedCellsChanged="dataGrid_SelectedCellsChanged"
                       PreviewMouseWheel="DataGrid_PreviewMouseWheel"/>
         </StackPanel>
     </ScrollViewer>
