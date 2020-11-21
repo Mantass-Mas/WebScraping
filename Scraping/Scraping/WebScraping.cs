@@ -9,7 +9,7 @@ using System.Net.Http;
 
 namespace Scraping
 {
-    public class WebScraping
+    static class WebScraping
     {
         static HttpClient client = new HttpClient();
 

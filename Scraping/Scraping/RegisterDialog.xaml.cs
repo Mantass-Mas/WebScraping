@@ -20,9 +20,11 @@ namespace Scraping
     /// </summary>
     public partial class RegisterDialog : Window
     {
-        public RegisterDialog()
+        public RegisterDialog(string text)
         {
             InitializeComponent();
+            var vm = new RegisterViewModel(text);
+            DataContext = vm;
         }
         private void Register_Button_Click(object sender, RoutedEventArgs e)
         {

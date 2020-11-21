@@ -23,7 +23,7 @@ namespace Scraping
         public MainWindow()
         {
             InitializeComponent();
-            var vm = new ViewModel();
+            var vm = new MainViewModel();
             DataContext = vm;
         }
         private void DataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -50,7 +50,7 @@ namespace Scraping
 
             /// <summary>
             /// DataGridのタイトルセルが選択されたとき、
-            /// MyBook登録確認ダイアログを表示
+            /// お気に入り登録確認ダイアログを表示
             /// </summary>
             if (dataGrid.CurrentColumn.Header.ToString() == "Title")
             {
@@ -60,8 +60,8 @@ namespace Scraping
                     var cell = dataGrid.CurrentColumn.GetCellContent(dataGrid.CurrentItem) as TextBlock;
                     var cell_text = cell.Text;
                     cell_text = cell_text.Trim(' ', '(', ')');
-                    //var comic_num = 0;
                     var end = cell_text[cell_text.Length - 1].ToString();
+                    //numには一応何巻かの情報が入るはず(使わないけど)
                     var isNum = int.TryParse(end, out var num);
                     while (isNum)
                     {
@@ -70,16 +70,20 @@ namespace Scraping
                         isNum = int.TryParse(end, out num);
                     }
                     var title = cell_text.Trim(' ', '(', ')');
-                    var window = new RegisterDialog();
-                    window.RegisterContent.Text = title;
+                    var text = $"「{title}」\nをお気に入りに登録しますか？";
+                    var window = new RegisterDialog(text);
                     bool? res = window.ShowDialog();
-                    //MyBook登録確認ダイアログで登録が押された場合はtrueが返ってくる
-                    if (res == true)
+                    //登録確認ダイアログで登録が押された場合はtrueが返ってくる
+                    /*if (res == true)
                     {
-                        //MyBooksにタイトルを追加
+                        //お気に入りにタイトルを追加
                         Registered(title);
-                    }
+                    }*/
                 }
+            }
+            else
+            {
+                dataGrid.UnselectAllCells();
             }
         }
     }

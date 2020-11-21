@@ -18,7 +18,7 @@ namespace Scraping
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-    public class ViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase
     {
         /// <summary>
         /// すべての本のリスト
@@ -96,7 +96,7 @@ namespace Scraping
         /// <summary>
         /// コンストラクター
         /// </summary>
-        public ViewModel()
+        public MainViewModel()
         {
             _bookList = WebScraping.GetWebData();
             ButtonClick = new ButtonClickCommand(this);
@@ -121,9 +121,9 @@ namespace Scraping
     }
     public class ButtonClickCommand : ICommand
     {
-        private ViewModel _vm;
+        private MainViewModel _vm;
         public event EventHandler CanExecuteChanged;
-        public ButtonClickCommand(ViewModel viewModel)
+        public ButtonClickCommand(MainViewModel viewModel)
         {
             _vm = viewModel;
         }
@@ -152,5 +152,25 @@ namespace Scraping
         public string Title { get; set; }
         public string ReleaseDate { get; set; }
         public string Author { get; set; }
+    }
+    public class RegisterViewModel : ViewModelBase
+    {
+        private string text;
+        public string Text
+        {
+            get
+            {
+                return text;
+            }
+            set
+            {
+                text = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public RegisterViewModel(string text)
+        {
+            Text = text;
+        }
     }
 }
