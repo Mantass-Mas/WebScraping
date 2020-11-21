@@ -9,10 +9,17 @@ using System.Net.Http;
 
 namespace Scraping
 {
+    /// <summary>
+    /// Webスクレイピング用の静的クラス
+    /// </summary>
     static class WebScraping
     {
         static HttpClient client = new HttpClient();
 
+        /// <summary>
+        /// サイトから新刊情報を取得し、Book型のリストとして返す(同期処理)
+        /// </summary>
+        /// <returns></returns>
         public static List<Book> GetWebData()
         {
             var urlstring = @"http://yurinavi.com/yuri-calendar/";

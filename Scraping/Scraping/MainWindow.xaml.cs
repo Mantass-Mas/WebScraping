@@ -26,6 +26,12 @@ namespace Scraping
             var vm = new MainViewModel();
             DataContext = vm;
         }
+
+        /// <summary>
+        /// DataGrid上のマウスホイール操作をWindow全体に伝える
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (sender is DataGrid)
@@ -44,41 +50,22 @@ namespace Scraping
                 }
             }
         }
+
+        /// <summary>
+        /// 本のタイトル選択時にお気に入り登録する(登録確認あり)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
             var dataGrid = sender as DataGrid;
-
-            /// <summary>
-            /// DataGridのタイトルセルが選択されたとき、
-            /// お気に入り登録確認ダイアログを表示
-            /// </summary>
             if (dataGrid.CurrentColumn.Header.ToString() == "Title")
             {
                 if (dataGrid.CurrentCell != null)
                 {
-                    //選択されたセルから純粋にタイトルのみを抽出する
-                    var cell = dataGrid.CurrentColumn.GetCellContent(dataGrid.CurrentItem) as TextBlock;
-                    var cell_text = cell.Text;
-                    cell_text = cell_text.Trim(' ', '(', ')');
-                    var end = cell_text[cell_text.Length - 1].ToString();
-                    //numには一応何巻かの情報が入るはず(使わないけど)
-                    var isNum = int.TryParse(end, out var num);
-                    while (isNum)
-                    {
-                        cell_text = cell_text.Remove(cell_text.Length - 1, 1);
-                        end = cell_text[cell_text.Length - 1].ToString();
-                        isNum = int.TryParse(end, out num);
-                    }
-                    var title = cell_text.Trim(' ', '(', ')');
-                    var text = $"「{title}」\nをお気に入りに登録しますか？";
-                    var window = new RegisterDialog(text);
-                    bool? res = window.ShowDialog();
-                    //登録確認ダイアログで登録が押された場合はtrueが返ってくる
-                    /*if (res == true)
-                    {
-                        //お気に入りにタイトルを追加
-                        Registered(title);
-                    }*/
+                    var vm = DataContext as MainViewModel;
+                    vm.AddFavorite(dataGrid);
+                    dataGrid.UnselectAllCells();
                 }
             }
             else

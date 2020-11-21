@@ -26,11 +26,22 @@ namespace Scraping
             var vm = new RegisterViewModel(text);
             DataContext = vm;
         }
+
+        /// <summary>
+        /// ダイアログ上で"登録"が押された場合に呼び出し元に伝える
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Register_Button_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
         }
 
+        /// <summary>
+        /// ダイアログ上で"キャンセル"が押された場合に呼び出し元に伝える
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Cancel_Button_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
