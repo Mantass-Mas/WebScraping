@@ -8,6 +8,9 @@ using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Controls;
+using System.Data;
+using System.Data.SQLite;
+using System.Data.SQLite.Linq;
 
 namespace Scraping
 {
@@ -36,7 +39,7 @@ namespace Scraping
         /// <summary>
         /// お気に入り登録した本のリスト
         /// </summary>
-        private List<Book> _favoriteList = new List<Book>();
+        private List<string> _favoriteTitles = new List<string>();
 
         /// <summary>
         /// 現在お気に入り表示かどうか
@@ -130,12 +133,25 @@ namespace Scraping
             {
                 HeaderText = "お気に入り表示";
                 ButtonText = "全表示に切り替え";
-                ViewList = new List<Book>(_favoriteList);
+                var favoriteList = new List<Book>();
+                foreach(var title in _favoriteTitles)
+                {
+                    foreach(var book in _bookList)
+                    {
+                        if (book.Title.Contains(title))
+                        {
+                            favoriteList.Add(book);
+                        }
+                    }
+                }
+                ReleaseDateSet(favoriteList);
+                ViewList = new List<Book>(favoriteList);
             }
             else
             {
                 HeaderText = "全表示";
                 ButtonText = "お気に入り表示に切り替え";
+                ReleaseDateSet(_bookList);
                 ViewList = new List<Book>(_bookList);
             }
         }
@@ -166,17 +182,39 @@ namespace Scraping
             //登録確認ダイアログで登録が押された場合はtrueが返ってくる
             if (res == true)
             {
-                var checkList = _favoriteList.Select(x => x.Title).ToArray();
-                if (!checkList.Contains(title))
+                if (!_favoriteTitles.Contains(title))
                 {
-                    foreach(var book in _bookList)
-                    {
-                        if(book.Title == title)
-                        {
-                            _favoriteList.Add(book);
-                        }
-                    }
+                    _favoriteTitles.Add(title);
                 }
+            }
+        }
+
+        /// <summary>
+        /// ReleaseDateを表示したりしなかったり
+        /// </summary>
+        public void ReleaseDateSet(List<Book> books)
+        {
+            books = books.OrderByDescending(x => x.dateData).ToList();
+            foreach (var book in books)
+            {
+                var releaseDates = books?.Select(x => x.ReleaseDate);
+                if (!(releaseDates.Contains(book.dateData)))
+                {
+                    book.ReleaseDate = book.dateData;
+                }
+                else
+                {
+                    book.ReleaseDate = "";
+                }
+            }
+        }
+
+        public void DataBaseWrite()
+        {
+            var path = "favorite.db";
+            using (var conn = new SQLiteConnection())
+            {
+
             }
         }
     }
@@ -215,9 +253,34 @@ namespace Scraping
     /// </summary>
     public class Book
     {
-        public string Title { get; set; }
+        public string dateData;
         public string ReleaseDate { get; set; }
+        public string Title { get; set; }
         public string Author { get; set; }
+        public Book(string date, string title, string author = "")
+        {
+            dateData = date;
+            ReleaseDate = "";
+            Title = title;
+            Author = author;
+            //Console.WriteLine($"dateDate:{dateData}/ReleaseDate:{ReleaseDate}/Title:{Title}/Author:{Author}");
+        }
+    }
+
+    /// <summary>
+    /// データベース用クラス
+    /// </summary>
+    public class DataBase
+    {
+        /// <summary>
+        /// プライマリーキー
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// タイトル名
+        /// </summary>
+        public string Title { get; set; }
     }
 
     /// <summary>

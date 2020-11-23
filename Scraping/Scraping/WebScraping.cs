@@ -46,23 +46,13 @@ namespace Scraping
                         {
                             var title = bookData[0];
                             var author = bookData[1];
-                            data.Add(new Book()
-                            {
-                                ReleaseDate = releaseDate,
-                                Title = title,
-                                Author = author
-                            });
+                            data.Add(new Book(releaseDate, title, author));
                             count++;
                         }
                         else
                         {
                             var title = bookData[0];
-                            data.Add(new Book()
-                            {
-                                ReleaseDate = releaseDate,
-                                Title = title,
-                                Author = ""
-                            });
+                            data.Add(new Book(releaseDate, title));
                             count++;
                         }
                     }
@@ -72,25 +62,29 @@ namespace Scraping
                     var bookData = books[count].TextContent.Split('\n');
                     if (bookData.Length == 2)
                     {
+                        var releaseDate = "";
+                        var index = data.Count - 1;
+                        while(!(releaseDate != "" || index < 0))
+                        {
+                            releaseDate = data[index].dateData;
+                            index--;
+                        }
                         var title = bookData[0];
                         var author = bookData[1];
-                        data.Add(new Book()
-                        {
-                            ReleaseDate = "",
-                            Title = title,
-                            Author = author
-                        });
+                        data.Add(new Book(releaseDate, title, author));
                         count++;
                     }
                     else
                     {
-                        var title = bookData[0];
-                        data.Add(new Book()
+                        var releaseDate = "";
+                        var index = data.Count - 1;
+                        while (!(releaseDate != "" || index < 0))
                         {
-                            ReleaseDate = "",
-                            Title = title,
-                            Author = ""
-                        });
+                            releaseDate = data[index].dateData;
+                            index--;
+                        }
+                        var title = bookData[0];
+                        data.Add(new Book(releaseDate, title));
                         count++;
                     }
                 }

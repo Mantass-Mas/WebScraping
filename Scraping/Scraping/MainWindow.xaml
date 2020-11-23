@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Scraping"
         mc:Ignorable="d"
+        Closed="Window_Closed"
         Title="百合漫画　発売日" Height="500" Width="900">
     <ScrollViewer>
         <StackPanel>
