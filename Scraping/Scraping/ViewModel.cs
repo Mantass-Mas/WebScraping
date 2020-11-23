@@ -166,7 +166,17 @@ namespace Scraping
             //登録確認ダイアログで登録が押された場合はtrueが返ってくる
             if (res == true)
             {
-                
+                var checkList = _favoriteList.Select(x => x.Title).ToArray();
+                if (!checkList.Contains(title))
+                {
+                    foreach(var book in _bookList)
+                    {
+                        if(book.Title == title)
+                        {
+                            _favoriteList.Add(book);
+                        }
+                    }
+                }
             }
         }
     }

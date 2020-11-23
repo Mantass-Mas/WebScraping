@@ -59,18 +59,14 @@ namespace Scraping
         private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
             var dataGrid = sender as DataGrid;
-            if (dataGrid.CurrentColumn.Header.ToString() == "Title")
+            
+            if (dataGrid.CurrentColumn?.Header.ToString() == "Title")
             {
                 if (dataGrid.CurrentCell != null)
                 {
                     var vm = DataContext as MainViewModel;
                     vm.AddFavorite(dataGrid);
-                    dataGrid.UnselectAllCells();
                 }
-            }
-            else
-            {
-                dataGrid.UnselectAllCells();
             }
         }
     }
