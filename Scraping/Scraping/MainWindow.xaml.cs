@@ -74,5 +74,15 @@ namespace Scraping
         {
 
         }
+
+        /// <summary>
+        /// DataGridの内容を編集できないように
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
     }
 }

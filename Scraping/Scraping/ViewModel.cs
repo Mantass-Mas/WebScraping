@@ -162,29 +162,42 @@ namespace Scraping
         /// <param name="dataGrid">本のタイトル情報</param>
         public void AddFavorite(DataGrid dataGrid)
         {
+            // お気に入り表示中は処理を実行しない
+            if (FavoriteView)
+            {
+                return;
+            }
             //選択されたセル(タイトル部分)からタイトル名のみを抽出する
             var cell = dataGrid.CurrentColumn.GetCellContent(dataGrid.CurrentItem) as TextBlock;
             var cell_text = cell.Text;
             cell_text = cell_text.Trim(' ', '(', ')');
-            var end = cell_text[cell_text.Length - 1].ToString();
-            //numには一応何巻かの情報が入るはず(使わないけど)
-            var isNum = int.TryParse(end, out var num);
-            while (isNum)
+            if(cell_text != "")
             {
-                cell_text = cell_text.Remove(cell_text.Length - 1, 1);
-                end = cell_text[cell_text.Length - 1].ToString();
-                isNum = int.TryParse(end, out num);
-            }
-            var title = cell_text.Trim(' ', '(', ')');
-            var text = $"「{title}」\nをお気に入りに登録しますか？";
-            var window = new RegisterDialog(text);
-            bool? res = window.ShowDialog();
-            //登録確認ダイアログで登録が押された場合はtrueが返ってくる
-            if (res == true)
-            {
-                if (!_favoriteTitles.Contains(title))
+                var end = cell_text[cell_text.Length - 1].ToString();
+                //numには一応何巻かの情報が入るはず(使わないけど)
+                var isNum = int.TryParse(end, out var num);
+                while (isNum)
                 {
-                    _favoriteTitles.Add(title);
+                    cell_text = cell_text.Remove(cell_text.Length - 1, 1);
+                    if (cell_text.Length <= 0)
+                    {
+                        cell_text = cell.Text;
+                        break;
+                    }
+                    end = cell_text[cell_text.Length - 1].ToString();
+                    isNum = int.TryParse(end, out num);
+                }
+                var title = cell_text.Trim(' ', '(', ')');
+                var text = $"「{title}」\nをお気に入りに登録しますか？";
+                var window = new RegisterDialog(text);
+                bool? res = window.ShowDialog();
+                //登録確認ダイアログで登録が押された場合はtrueが返ってくる
+                if (res == true)
+                {
+                    if (!_favoriteTitles.Contains(title))
+                    {
+                        _favoriteTitles.Add(title);
+                    }
                 }
             }
         }

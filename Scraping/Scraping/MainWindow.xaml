@@ -16,6 +16,7 @@
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
                       SelectionUnit="Cell"
                       SelectedCellsChanged="dataGrid_SelectedCellsChanged"
+                      BeginningEdit="DataGrid_BeginningEdit"
                       PreviewMouseWheel="DataGrid_PreviewMouseWheel"/>
         </StackPanel>
     </ScrollViewer>
