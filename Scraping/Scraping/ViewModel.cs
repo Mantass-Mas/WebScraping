@@ -144,14 +144,14 @@ namespace Scraping
                         }
                     }
                 }
-                ReleaseDateSet(favoriteList);
+                favoriteList = ReleaseDateSet(favoriteList);
                 ViewList = new List<Book>(favoriteList);
             }
             else
             {
                 HeaderText = "全表示";
                 ButtonText = "お気に入り表示に切り替え";
-                ReleaseDateSet(_bookList);
+                _bookList = ReleaseDateSet(_bookList);
                 ViewList = new List<Book>(_bookList);
             }
         }
@@ -205,13 +205,14 @@ namespace Scraping
         /// <summary>
         /// ReleaseDateを表示したりしなかったり
         /// </summary>
-        public void ReleaseDateSet(List<Book> books)
+        public List<Book> ReleaseDateSet(List<Book> books)
         {
-            books = books.OrderByDescending(x => x.dateData).ToList();
-            foreach (var book in books)
+            var sortedbooks = books.OrderBy(x => x.id).ToList();
+            var count = 0;
+            foreach (var book in sortedbooks)
             {
-                var releaseDates = books?.Select(x => x.ReleaseDate);
-                if (!(releaseDates.Contains(book.dateData)))
+                var checkList = sortedbooks?.Take(count).Select(x => x.ReleaseDate);
+                if (!(checkList.Contains(book.dateData)))
                 {
                     book.ReleaseDate = book.dateData;
                 }
@@ -219,7 +220,9 @@ namespace Scraping
                 {
                     book.ReleaseDate = "";
                 }
+                count++;
             }
+            return sortedbooks;
         }
 
         public void DataBaseWrite()
@@ -266,17 +269,19 @@ namespace Scraping
     /// </summary>
     public class Book
     {
+        public int id;
         public string dateData;
         public string ReleaseDate { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
-        public Book(string date, string title, string author = "")
+        public Book(int num, string date, string title, string author = "")
         {
+            id = num;
             dateData = date;
             ReleaseDate = "";
             Title = title;
             Author = author;
-            //Console.WriteLine($"dateDate:{dateData}/ReleaseDate:{ReleaseDate}/Title:{Title}/Author:{Author}");
+            Console.WriteLine($"id:{id}/dateDate:{dateData}/ReleaseDate:{ReleaseDate}/Title:{Title}/Author:{Author}");
         }
     }
 

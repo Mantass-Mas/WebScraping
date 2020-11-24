@@ -46,13 +46,13 @@ namespace Scraping
                         {
                             var title = bookData[0];
                             var author = bookData[1];
-                            data.Add(new Book(releaseDate, title, author));
+                            data.Add(new Book(count, releaseDate, title, author));
                             count++;
                         }
                         else
                         {
                             var title = bookData[0];
-                            data.Add(new Book(releaseDate, title));
+                            data.Add(new Book(count, releaseDate, title));
                             count++;
                         }
                     }
@@ -71,7 +71,7 @@ namespace Scraping
                         }
                         var title = bookData[0];
                         var author = bookData[1];
-                        data.Add(new Book(releaseDate, title, author));
+                        data.Add(new Book(count, releaseDate, title, author));
                         count++;
                     }
                     else
@@ -84,7 +84,7 @@ namespace Scraping
                             index--;
                         }
                         var title = bookData[0];
-                        data.Add(new Book(releaseDate, title));
+                        data.Add(new Book(count, releaseDate, title));
                         count++;
                     }
                 }
