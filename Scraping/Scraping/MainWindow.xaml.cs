@@ -23,6 +23,7 @@ namespace Scraping
         public MainWindow()
         {
             InitializeComponent();
+            searchType.SelectedIndex = 0;
             var vm = new MainViewModel();
             DataContext = vm;
         }
