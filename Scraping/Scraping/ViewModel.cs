@@ -109,9 +109,9 @@ namespace Scraping
         }
 
         /// <summary>
-        /// 表示方法変更ボタンクリック用のコマンド
+        /// 表示方法変更ボタンクリック時のコマンド
         /// </summary>
-        public ICommand ButtonClick { get; set; }
+        public ICommand ViewChange { get; private set; }
 
         /// <summary>
         /// コンストラクター
@@ -119,7 +119,7 @@ namespace Scraping
         public MainViewModel()
         {
             _bookList = WebScraping.GetWebData();
-            ButtonClick = new ButtonClickCommand(this);
+            ViewChange = new ViewChangeCommand(this);
             FavoriteView = false;
             SetData();
         }
@@ -225,24 +225,51 @@ namespace Scraping
             return sortedbooks;
         }
 
-        public void DataBaseWrite()
+        public void Search(string searchType, string searchText)
+        {
+            var resultList = new List<Book>();
+            if(searchType == "タイトル名")
+            {
+                foreach(var book in ViewList)
+                {
+                    if (book.Title.Contains(searchText))
+                    {
+                        resultList.Add(book);
+                    }
+                }
+            }
+            else if(searchType == "著者名")
+            {
+                foreach (var book in ViewList)
+                {
+                    if (book.Author.Contains(searchText))
+                    {
+                        resultList.Add(book);
+                    }
+                }
+            }
+            resultList = ReleaseDateSet(resultList);
+            ViewList = resultList;
+        }
+
+        /*public void DataBaseWrite()
         {
             var path = "favorite.db";
             using (var conn = new SQLiteConnection())
             {
 
             }
-        }
+        }*/
     }
 
     /// <summary>
     /// 表示切替ボタン用のコマンド
     /// </summary>
-    public class ButtonClickCommand : ICommand
+    public class ViewChangeCommand : ICommand
     {
         private MainViewModel _vm;
         public event EventHandler CanExecuteChanged;
-        public ButtonClickCommand(MainViewModel viewModel)
+        public ViewChangeCommand(MainViewModel viewModel)
         {
             _vm = viewModel;
         }

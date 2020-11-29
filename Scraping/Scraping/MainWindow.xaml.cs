@@ -85,5 +85,25 @@ namespace Scraping
         {
             e.Cancel = true;
         }
+
+        /// <summary>
+        /// 検索用イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as MainViewModel;
+            var text = searchText.Text.Trim();
+            if(text == ""){ return; }
+            vm.Search(searchType.Text, text);
+        }
+
+        private void SearchCancel_Click(object sender, RoutedEventArgs e)
+        {
+            searchText.Text = "";
+            var vm = DataContext as MainViewModel;
+            vm.SetData();
+        }
     }
 }

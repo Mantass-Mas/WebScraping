@@ -21,24 +21,33 @@
                         Margin="10" 
                         Width="auto" 
                         HorizontalAlignment="Left" 
-                        Command="{Binding ButtonClick}"/>
+                        Command="{Binding ViewChange}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <ComboBox x:Name="searchType" Width="75" Height="20" Margin="20,20,0,30" Padding="3,1">
+                <ComboBox x:Name="searchType" Width="75" Height="20" Margin="20,20,0,10" Padding="3,1">
                     <ComboBoxItem>タイトル名</ComboBoxItem>
                     <ComboBoxItem>著者名</ComboBoxItem>
                 </ComboBox>
                 <TextBox x:Name="searchText"
+                         Text="{Binding SearchText}"
                          Width="200"
                          Height="20"
-                         Margin="0,20,0,30"/>
+                         Margin="0,20,0,10"/>
                 <Button x:Name="searchButton"
                         Content="検索"
                         Width="auto"
                         Height="20"
                         Padding="5,0"
-                        Margin="20,20,0,30"/>
+                        Margin="20,20,0,10"
+                        Click="SearchButton_Click"/>
             </StackPanel>
+            <Button x:Name="searchCancel"
+                    Content="検索解除"
+                    Width="auto"
+                    Margin="30,10"
+                    Padding="3"
+                    HorizontalAlignment="Left"
+                    Click="SearchCancel_Click"/>
             <DataGrid x:Name="dataGrid"
                       Margin="10"
                       ItemsSource="{Binding ViewList}"
