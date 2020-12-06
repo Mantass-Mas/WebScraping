@@ -8,9 +8,6 @@ using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Controls;
-using System.Data;
-using System.Data.SQLite;
-using System.Data.SQLite.Linq;
 
 namespace Scraping
 {
@@ -39,7 +36,12 @@ namespace Scraping
         /// <summary>
         /// お気に入り登録した本のリスト
         /// </summary>
-        private List<string> _favoriteTitles = new List<string>();
+        private List<Data> _favoriteData = new List<Data>();
+
+        /// <summary>
+        /// データベース管理
+        /// </summary>
+        private DataBaseManager _dataBaseManager;
 
         /// <summary>
         /// 現在お気に入り表示かどうか
@@ -121,6 +123,7 @@ namespace Scraping
             _bookList = WebScraping.GetWebData();
             ViewChange = new ViewChangeCommand(this);
             FavoriteView = false;
+            _dataBaseManager = new DataBaseManager();
             SetData();
         }
 
@@ -134,11 +137,11 @@ namespace Scraping
                 HeaderText = "お気に入り表示";
                 ButtonText = "全表示に切り替え";
                 var favoriteList = new List<Book>();
-                foreach(var title in _favoriteTitles)
+                foreach(var data in _favoriteData)
                 {
                     foreach(var book in _bookList)
                     {
-                        if (book.Title.Contains(title))
+                        if (book.Title.Contains(data.Title))
                         {
                             favoriteList.Add(book);
                         }
@@ -194,9 +197,15 @@ namespace Scraping
                 //登録確認ダイアログで登録が押された場合はtrueが返ってくる
                 if (res == true)
                 {
-                    if (!_favoriteTitles.Contains(title))
+                    var favoriteTitles = _favoriteData.Select(x => x.Title);
+                    if (!favoriteTitles.Contains(title))
                     {
-                        _favoriteTitles.Add(title);
+                        var data = new Data()
+                        {
+                            Id = _favoriteData.Count + 1,
+                            Title = title,
+                        };
+                        _favoriteData.Add(data);
                     }
                 }
             }
@@ -251,15 +260,6 @@ namespace Scraping
             resultList = ReleaseDateSet(resultList);
             ViewList = resultList;
         }
-
-        /*public void DataBaseWrite()
-        {
-            var path = "favorite.db";
-            using (var conn = new SQLiteConnection())
-            {
-
-            }
-        }*/
     }
 
     /// <summary>
@@ -315,7 +315,7 @@ namespace Scraping
     /// <summary>
     /// データベース用クラス
     /// </summary>
-    public class DataBase
+    public class Data
     {
         /// <summary>
         /// プライマリーキー
