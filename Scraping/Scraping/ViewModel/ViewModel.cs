@@ -126,6 +126,7 @@ namespace Scraping.ViewModel
             ViewChange = new ViewChangeCommand(this);
             FavoriteView = false;
             _dataBaseManager = new DataBaseManager();
+            _favoriteData = _dataBaseManager.DataBaseRead();
             SetData();
         }
 
@@ -261,6 +262,11 @@ namespace Scraping.ViewModel
             }
             resultList = ReleaseDateSet(resultList);
             ViewList = resultList;
+        }
+
+        public void Save()
+        {
+            _dataBaseManager.DataBaseWrite(_favoriteData);
         }
     }
 

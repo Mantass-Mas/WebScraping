@@ -74,7 +74,8 @@ namespace Scraping.View
 
         private void Window_Closed(object sender, EventArgs e)
         {
-
+            var vm = DataContext as MainViewModel;
+            vm.Save();
         }
 
         /// <summary>

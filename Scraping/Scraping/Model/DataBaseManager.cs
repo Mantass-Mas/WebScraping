@@ -62,5 +62,33 @@ namespace Scraping.Model
                 }
             }
         }
+
+        public List<Data> DataBaseRead()
+        {
+            var list = new List<Data>();
+            using(var conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                using(var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT * FROM favorite";
+                    using(var reader = cmd.ExecuteReader())
+                    {
+                        while(reader.Read() == true)
+                        {
+                            int.TryParse(reader["ID"].ToString(), out int id);
+                            var title = reader["Title"].ToString();
+                            var data = new Data()
+                            {
+                                Id = id,
+                                Title = title,
+                            };
+                            list.Add(data);
+                        }
+                    }
+                }
+            }
+            return list;
+        }
     }
 }
