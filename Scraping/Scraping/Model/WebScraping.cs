@@ -7,7 +7,7 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using System.Net.Http;
 
-namespace Scraping
+namespace Scraping.Model
 {
     /// <summary>
     /// Webスクレイピング用の静的クラス

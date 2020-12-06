@@ -7,7 +7,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Data.SQLite.Linq;
 
-namespace Scraping
+namespace Scraping.Model
 {
     /// <summary>
     /// データベース管理用クラス

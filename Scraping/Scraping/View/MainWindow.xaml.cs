@@ -12,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Scraping.ViewModel;
 
-namespace Scraping
+namespace Scraping.View
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック

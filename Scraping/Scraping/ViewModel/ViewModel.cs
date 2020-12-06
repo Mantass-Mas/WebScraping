@@ -8,8 +8,10 @@ using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Controls;
+using Scraping.View;
+using Scraping.Model;
 
-namespace Scraping
+namespace Scraping.ViewModel
 {
     /// <summary>
     /// ViewModelのベース
@@ -289,43 +291,6 @@ namespace Scraping
             }
             _vm.SetData();
         }
-    }
-
-    /// <summary>
-    /// Bookデータ用クラス
-    /// </summary>
-    public class Book
-    {
-        public int id;
-        public string dateData;
-        public string ReleaseDate { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public Book(int num, string date, string title, string author = "")
-        {
-            id = num;
-            dateData = date;
-            ReleaseDate = "";
-            Title = title;
-            Author = author;
-            Console.WriteLine($"id:{id}/dateDate:{dateData}/ReleaseDate:{ReleaseDate}/Title:{Title}/Author:{Author}");
-        }
-    }
-
-    /// <summary>
-    /// データベース用クラス
-    /// </summary>
-    public class Data
-    {
-        /// <summary>
-        /// プライマリーキー
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// タイトル名
-        /// </summary>
-        public string Title { get; set; }
     }
 
     /// <summary>

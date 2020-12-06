@@ -83,13 +83,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataBaseManager.cs" />
-    <Compile Include="RegisterDialog.xaml.cs">
+    <Compile Include="Model\DataBaseManager.cs" />
+    <Compile Include="Model\Book.cs" />
+    <Compile Include="Model\Data.cs" />
+    <Compile Include="View\RegisterDialog.xaml.cs">
       <DependentUpon>RegisterDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel.cs" />
-    <Compile Include="WebScraping.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="Model\WebScraping.cs" />
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -97,11 +99,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="RegisterDialog.xaml">
+    <Page Include="View\RegisterDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
