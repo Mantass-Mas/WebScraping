@@ -12,7 +12,7 @@ namespace Scraping.Model
     /// <summary>
     /// データベース管理用クラス
     /// </summary>
-    class DataBaseManager
+    public class DataBaseManager
     {
         private static readonly string _fileName = @"favorite.splite3";
         private readonly string _connectionString;
@@ -63,6 +63,10 @@ namespace Scraping.Model
             }
         }
 
+        /// <summary>
+        /// データベース読み込み用
+        /// </summary>
+        /// <returns>お気に入りデータ</returns>
         public List<Data> DataBaseRead()
         {
             var list = new List<Data>();
@@ -89,6 +93,40 @@ namespace Scraping.Model
                 }
             }
             return list;
+        }
+
+        /// <summary>
+        /// 単体削除
+        /// </summary>
+        /// <param name="id">削除するID</param>
+        public void RemoveAt(int id)
+        {
+            using(var conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                using(var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM favorite WHERE ID = @ID";
+                    cmd.Parameters.Add(new SQLiteParameter("@ID", id));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 全削除
+        /// </summary>
+        public void RemoveAll()
+        {
+            using(var conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                using(var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM favorite";
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

@@ -86,11 +86,18 @@
     <Compile Include="Model\DataBaseManager.cs" />
     <Compile Include="Model\Book.cs" />
     <Compile Include="Model\Data.cs" />
+    <Compile Include="View\AllDeleteWindow.xaml.cs">
+      <DependentUpon>AllDeleteWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\RegisterDialog.xaml.cs">
       <DependentUpon>RegisterDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="Model\WebScraping.cs" />
+    <Page Include="View\AllDeleteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

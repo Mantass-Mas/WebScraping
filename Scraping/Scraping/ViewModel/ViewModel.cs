@@ -44,6 +44,13 @@ namespace Scraping.ViewModel
         /// データベース管理
         /// </summary>
         private DataBaseManager _dataBaseManager;
+        public DataBaseManager DBManager
+        {
+            get
+            {
+                return _dataBaseManager;
+            }
+        }
 
         /// <summary>
         /// 現在お気に入り表示かどうか
@@ -118,12 +125,18 @@ namespace Scraping.ViewModel
         public ICommand ViewChange { get; private set; }
 
         /// <summary>
+        /// 全削除ボタンクリック時のコマンド
+        /// </summary>
+        public ICommand Delete { get; private set; }
+
+        /// <summary>
         /// コンストラクター
         /// </summary>
         public MainViewModel()
         {
             _bookList = WebScraping.GetWebData();
             ViewChange = new ViewChangeCommand(this);
+            Delete = new DeleteCommand(this);
             FavoriteView = false;
             _dataBaseManager = new DataBaseManager();
             _favoriteData = _dataBaseManager.DataBaseRead();
@@ -203,15 +216,33 @@ namespace Scraping.ViewModel
                     var favoriteTitles = _favoriteData.Select(x => x.Title);
                     if (!favoriteTitles.Contains(title))
                     {
+                        int lastNum;
+                        if(_favoriteData.Count == 0)
+                        {
+                            lastNum = -1;
+                        }
+                        else
+                        {
+                            lastNum = _favoriteData[_favoriteData.Count - 1].Id;
+                        }
                         var data = new Data()
                         {
-                            Id = _favoriteData.Count + 1,
+                            Id = lastNum + 1,
                             Title = title,
                         };
                         _favoriteData.Add(data);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 登録済みリストの全削除用
+        /// </summary>
+        public void AllDeleteFavorite()
+        {
+            _favoriteData.Clear();
+            ViewList = new List<Book>();
         }
 
         /// <summary>
@@ -296,6 +327,33 @@ namespace Scraping.ViewModel
                 _vm.FavoriteView = true;
             }
             _vm.SetData();
+        }
+    }
+
+    /// <summary>
+    /// データベース全削除ボタン用コマンド
+    /// </summary>
+    public class DeleteCommand : ICommand
+    {
+        private MainViewModel _vm;
+        public event EventHandler CanExecuteChanged;
+        public DeleteCommand(MainViewModel viewModel)
+        {
+            _vm = viewModel;
+        }
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+        public void Execute(object parameter)
+        {
+            var window = new AllDeleteWindow();
+            bool? res = window.ShowDialog();
+            if(res == true)
+            {
+                _vm.DBManager.RemoveAll();
+                _vm.AllDeleteFavorite();
+            }
         }
     }
 
