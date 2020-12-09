@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Scraping.ViewModel;
 
 namespace Scraping.View
 {
@@ -22,7 +23,7 @@ namespace Scraping.View
         public DeleteWindow(string text)
         {
             InitializeComponent();
-            var vm = new DeleteWindow(text);
+            var vm = new DeleteViewModel(text);
             DataContext = vm;
         }
 
