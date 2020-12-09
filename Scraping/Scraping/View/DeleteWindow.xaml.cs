@@ -17,11 +17,13 @@ namespace Scraping.View
     /// <summary>
     /// DeleteWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class AllDeleteWindow : Window
+    public partial class DeleteWindow : Window
     {
-        public AllDeleteWindow()
+        public DeleteWindow(string text)
         {
             InitializeComponent();
+            var vm = new DeleteWindow(text);
+            DataContext = vm;
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)

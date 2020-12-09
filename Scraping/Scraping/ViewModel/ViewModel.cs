@@ -347,7 +347,8 @@ namespace Scraping.ViewModel
         }
         public void Execute(object parameter)
         {
-            var window = new AllDeleteWindow();
+            var text = "すべてのタイトル";
+            var window = new DeleteWindow(text);
             bool? res = window.ShowDialog();
             if(res == true)
             {
@@ -379,6 +380,33 @@ namespace Scraping.ViewModel
             }
         }
         public RegisterViewModel(string text)
+        {
+            Text = text;
+        }
+    }
+
+    /// <summary>
+    /// お気に入り削除確認ダイアログ用のViewModel
+    /// </summary>
+    public class DeleteViewModel : ViewModelBase
+    {
+        /// <summary>
+        /// ダイアログに表示するテキスト
+        /// </summary>
+        private string text;
+        public string Text
+        {
+            get
+            {
+                return text;
+            }
+            set
+            {
+                text = value + "をお気に入りから削除しますか？";
+                NotifyPropertyChanged();
+            }
+        }
+        public DeleteViewModel(string text)
         {
             Text = text;
         }
