@@ -67,7 +67,7 @@ namespace Scraping.View
                 if (dataGrid.CurrentCell != null)
                 {
                     var vm = DataContext as MainViewModel;
-                    vm.AddFavorite(dataGrid);
+                    vm.FavoriteOperation(dataGrid);
                 }
             }
         }

@@ -51,6 +51,7 @@
                         Height="20"
                         Padding="5,0"
                         Margin="20,20,0,10"
+                        IsDefault="{Binding ElementName=searchText, Path=IsKeyboardFocused}"
                         Click="SearchButton_Click"/>
             </StackPanel>
             <Button x:Name="searchCancel"

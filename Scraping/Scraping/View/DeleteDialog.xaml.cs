@@ -18,9 +18,9 @@ namespace Scraping.View
     /// <summary>
     /// DeleteWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class DeleteWindow : Window
+    public partial class DeleteDialog : Window
     {
-        public DeleteWindow(string text)
+        public DeleteDialog(string text)
         {
             InitializeComponent();
             var vm = new DeleteViewModel(text);

@@ -139,7 +139,7 @@ namespace Scraping.ViewModel
             Delete = new DeleteCommand(this);
             FavoriteView = false;
             _dataBaseManager = new DataBaseManager();
-            _favoriteData = _dataBaseManager.DataBaseRead();
+            _favoriteData = DBManager.DataBaseRead();
             SetData();
         }
 
@@ -176,25 +176,25 @@ namespace Scraping.ViewModel
         }
 
         /// <summary>
-        /// 登録確認ダイアログを出し、登録する場合は_favoriteListに追加する
+        /// dataGridのタイトルを選択した際の処理
+        /// 全表示時：お気に入り登録の処理
+        /// お気に入り表示時：お気に入り削除の処理
         /// </summary>
         /// <param name="dataGrid">本のタイトル情報</param>
-        public void AddFavorite(DataGrid dataGrid)
+        public void FavoriteOperation(DataGrid dataGrid)
         {
-            // お気に入り表示中は処理を実行しない
-            if (FavoriteView)
+            // 選択されたセル(タイトル部分)からタイトル名のみを抽出する
+            var cell = dataGrid.CurrentColumn.GetCellContent(dataGrid.CurrentItem) as TextBlock;
+            if(cell == null)
             {
                 return;
             }
-            //選択されたセル(タイトル部分)からタイトル名のみを抽出する
-            var cell = dataGrid.CurrentColumn.GetCellContent(dataGrid.CurrentItem) as TextBlock;
             var cell_text = cell.Text;
             cell_text = cell_text.Trim(' ', '(', ')');
-            if(cell_text != "")
+            if (cell_text != "")
             {
                 var end = cell_text[cell_text.Length - 1].ToString();
-                //numには一応何巻かの情報が入るはず(使わないけど)
-                var isNum = int.TryParse(end, out var num);
+                var isNum = int.TryParse(end, out int num);
                 while (isNum)
                 {
                     cell_text = cell_text.Remove(cell_text.Length - 1, 1);
@@ -206,28 +206,68 @@ namespace Scraping.ViewModel
                     end = cell_text[cell_text.Length - 1].ToString();
                     isNum = int.TryParse(end, out num);
                 }
-                var title = cell_text.Trim(' ', '(', ')');
-                var text = $"「{title}」\nをお気に入りに登録しますか？";
-                var window = new RegisterDialog(text);
+            }
+            var title = cell_text.Trim(' ', '(', ')');
+
+            /// お気に入り表示なら削除、全表示なら登録
+            if (FavoriteView)
+            {
+                var window = new DeleteDialog(title);
                 bool? res = window.ShowDialog();
-                //登録確認ダイアログで登録が押された場合はtrueが返ってくる
+                // 削除確認ダイアログで登録が押された場合のみtrueが返ってくる
+                if(res == true)
+                {
+                    foreach(var data in _favoriteData)
+                    {
+                        if(data.Title == title)
+                        {
+                            DBManager.RemoveAt(data.Id);
+                            _favoriteData.Remove(data);
+                            SetData();
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var window = new RegisterDialog(title);
+                bool? res = window.ShowDialog();
+                // 登録確認ダイアログで登録が押された場合のみtrueが返ってくる
                 if (res == true)
                 {
                     var favoriteTitles = _favoriteData.Select(x => x.Title);
                     if (!favoriteTitles.Contains(title))
                     {
-                        int lastNum;
-                        if(_favoriteData.Count == 0)
+                        var id = 0;
+                        if (_favoriteData.Count == 0)
                         {
-                            lastNum = -1;
+                            id = 1;
                         }
                         else
                         {
-                            lastNum = _favoriteData[_favoriteData.Count - 1].Id;
+                            var lastId = _favoriteData.Last().Id;
+                            var checkNum = 1;
+                            foreach (var f in _favoriteData)
+                            {
+                                if (f.Id != checkNum)
+                                {
+                                    id = checkNum;
+                                    break;
+                                }
+                                else
+                                {
+                                    checkNum++;
+                                }
+                            }
+                            if (id == 0)
+                            {
+                                id = lastId + 1;
+                            }
                         }
                         var data = new Data()
                         {
-                            Id = lastNum + 1,
+                            Id = id,
                             Title = title,
                         };
                         _favoriteData.Add(data);
@@ -242,7 +282,7 @@ namespace Scraping.ViewModel
         public void AllDeleteFavorite()
         {
             _favoriteData.Clear();
-            ViewList = new List<Book>();
+            SetData();
         }
 
         /// <summary>
@@ -268,6 +308,11 @@ namespace Scraping.ViewModel
             return sortedbooks;
         }
 
+        /// <summary>
+        /// 検索用
+        /// </summary>
+        /// <param name="searchType">タイトルか著者か</param>
+        /// <param name="searchText">検索文字列</param>
         public void Search(string searchType, string searchText)
         {
             var resultList = new List<Book>();
@@ -295,9 +340,12 @@ namespace Scraping.ViewModel
             ViewList = resultList;
         }
 
+        /// <summary>
+        /// 終了時データベース書き込み
+        /// </summary>
         public void Save()
         {
-            _dataBaseManager.DataBaseWrite(_favoriteData);
+            DBManager.DataBaseWrite(_favoriteData);
         }
     }
 
@@ -347,10 +395,11 @@ namespace Scraping.ViewModel
         }
         public void Execute(object parameter)
         {
-            var text = "すべてのタイトル";
-            var window = new DeleteWindow(text);
+            var title = "すべてのタイトル";
+            var window = new DeleteDialog(title);
             bool? res = window.ShowDialog();
-            if(res == true)
+            // 削除確認ダイアログで登録が押された場合のみtrueが返ってくる
+            if (res == true)
             {
                 _vm.DBManager.RemoveAll();
                 _vm.AllDeleteFavorite();
@@ -379,9 +428,9 @@ namespace Scraping.ViewModel
                 NotifyPropertyChanged();
             }
         }
-        public RegisterViewModel(string text)
+        public RegisterViewModel(string title)
         {
-            Text = text;
+            Text = $"「{title}」\nをお気に入りに登録しますか？";
         }
     }
 
@@ -402,13 +451,13 @@ namespace Scraping.ViewModel
             }
             set
             {
-                text = value + "をお気に入りから削除しますか？";
+                text = value;
                 NotifyPropertyChanged();
             }
         }
-        public DeleteViewModel(string text)
+        public DeleteViewModel(string title)
         {
-            Text = text;
+            Text = $"「{title}」\nをお気に入りから削除しますか？";
         }
     }
 }
