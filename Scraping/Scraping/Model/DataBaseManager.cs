@@ -19,8 +19,22 @@ namespace Scraping.Model
 
         public DataBaseManager()
         {
+            Console.WriteLine("コンストラクタ起動");
             var builder = new SQLiteConnectionStringBuilder { DataSource =  _fileName};
             _connectionString = builder.ToString();
+            using(var conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                using(var cmd = conn.CreateCommand())
+                {
+                    // Tableがなければ作成
+                    Console.WriteLine("テーブル作成開始");
+                    cmd.CommandText = "CREATE TABLE IF NOT EXISTS favorite (ID int PRIMARY KEY, Title string)";
+                    cmd.ExecuteNonQuery();
+                    Console.WriteLine("テーブル作成終了");
+                }
+            }
+            Console.WriteLine("コンストラクタ終了");
         }
 
         /// <summary>
@@ -29,16 +43,15 @@ namespace Scraping.Model
         /// <param name="datas">登録するお気に入りリスト</param>
         public void DataBaseWrite(IReadOnlyList<Data> datas)
         {
+            Console.WriteLine("データベース書き込み");
             using (var conn = new SQLiteConnection(_connectionString))
             {
                 conn.Open();
+                Console.WriteLine("データベース接続");
                 using (var cmd = conn.CreateCommand())
                 {
-                    // Tableがなければ作成
-                    cmd.CommandText = "CREATE TABLE IF NOT EXISTS favorite (ID int PRIMARY KEY, Title string)";
-                    cmd.ExecuteNonQuery();
-
                     // データの追加(書き込み)
+                    Console.WriteLine("データ書き込み開始");
                     cmd.CommandText = @"SELECT * FROM favorite";
                     var list = new List<int>();
                     using (var reader = cmd.ExecuteReader())
@@ -59,6 +72,7 @@ namespace Scraping.Model
                             cmd.ExecuteNonQuery();
                         }
                     }
+                    Console.WriteLine("データ書き込み終了");
                 }
             }
         }
@@ -69,12 +83,15 @@ namespace Scraping.Model
         /// <returns>お気に入りデータ</returns>
         public List<Data> DataBaseRead()
         {
+            Console.WriteLine("データベース読み込み");
             var list = new List<Data>();
             using(var conn = new SQLiteConnection(_connectionString))
             {
                 conn.Open();
-                using(var cmd = conn.CreateCommand())
+                Console.WriteLine("データベース接続");
+                using (var cmd = conn.CreateCommand())
                 {
+                    Console.WriteLine("データ読み込み開始");
                     cmd.CommandText = @"SELECT * FROM favorite";
                     using(var reader = cmd.ExecuteReader())
                     {
@@ -90,6 +107,7 @@ namespace Scraping.Model
                             list.Add(data);
                         }
                     }
+                    Console.WriteLine("データ読み込み終了");
                 }
             }
             return list;
@@ -101,14 +119,18 @@ namespace Scraping.Model
         /// <param name="id">削除するID</param>
         public void RemoveAt(int id)
         {
-            using(var conn = new SQLiteConnection(_connectionString))
+            Console.WriteLine("データ削除");
+            using (var conn = new SQLiteConnection(_connectionString))
             {
                 conn.Open();
-                using(var cmd = conn.CreateCommand())
+                Console.WriteLine("データベース接続");
+                using (var cmd = conn.CreateCommand())
                 {
+                    Console.WriteLine("削除処理開始");
                     cmd.CommandText = @"DELETE FROM favorite WHERE ID = @ID";
                     cmd.Parameters.Add(new SQLiteParameter("@ID", id));
                     cmd.ExecuteNonQuery();
+                    Console.WriteLine("削除処理終了");
                 }
             }
         }
@@ -118,13 +140,17 @@ namespace Scraping.Model
         /// </summary>
         public void RemoveAll()
         {
-            using(var conn = new SQLiteConnection(_connectionString))
+            Console.WriteLine("データ全削除");
+            using (var conn = new SQLiteConnection(_connectionString))
             {
                 conn.Open();
-                using(var cmd = conn.CreateCommand())
+                Console.WriteLine("データベース接続");
+                using (var cmd = conn.CreateCommand())
                 {
+                    Console.WriteLine("削除処理開始");
                     cmd.CommandText = @"DELETE FROM favorite";
                     cmd.ExecuteNonQuery();
+                    Console.WriteLine("削除処理終了");
                 }
             }
         }
