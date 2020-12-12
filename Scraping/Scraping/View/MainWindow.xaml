@@ -1,0 +1,74 @@
+﻿<Window x:Class="Scraping.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Scraping.View"
+        mc:Ignorable="d"
+        Closed="Window_Closed"
+        Title="百合漫画　発売日" Height="500" Width="900">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
+    </Window.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="viewStatus" 
+                           Text="{Binding HeaderText}" 
+                           FontSize="20" 
+                           Margin="10" 
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Left"/>
+                <Button x:Name="viewChangeButton" 
+                        Content="{Binding ButtonText}" 
+                        Margin="10" 
+                        Padding="3"
+                        Width="auto" 
+                        HorizontalAlignment="Left" 
+                        Command="{Binding ViewChange}"/>
+            </StackPanel>
+            <Button x:Name="delete"
+                    Content="お気に入り全削除"
+                    Margin="20,10"
+                    Padding="3"
+                    HorizontalAlignment="Left"
+                    Width="auto"
+                    Command="{Binding Delete}"
+                    Visibility="{Binding FavoriteView, Converter={StaticResource BoolVisibilityConverter}}"/>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox x:Name="searchType" Width="75" Height="20" Margin="20,20,0,10" Padding="3,1">
+                    <ComboBoxItem>タイトル名</ComboBoxItem>
+                    <ComboBoxItem>著者名</ComboBoxItem>
+                </ComboBox>
+                <TextBox x:Name="searchText"
+                         Text="{Binding SearchText}"
+                         Width="200"
+                         Height="20"
+                         Margin="0,20,0,10"/>
+                <Button x:Name="searchButton"
+                        Content="検索"
+                        Width="auto"
+                        Height="20"
+                        Padding="5,0"
+                        Margin="20,20,0,10"
+                        IsDefault="{Binding ElementName=searchText, Path=IsKeyboardFocused}"
+                        Click="SearchButton_Click"/>
+            </StackPanel>
+            <Button x:Name="searchCancel"
+                    Content="検索解除"
+                    Width="auto"
+                    Margin="30,10"
+                    Padding="3"
+                    HorizontalAlignment="Left"
+                    Click="SearchCancel_Click"/>
+            <DataGrid x:Name="dataGrid"
+                      Margin="10"
+                      ItemsSource="{Binding ViewList}"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      SelectionUnit="Cell"
+                      SelectedCellsChanged="dataGrid_SelectedCellsChanged"
+                      BeginningEdit="DataGrid_BeginningEdit"
+                      PreviewMouseWheel="DataGrid_PreviewMouseWheel"/>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
