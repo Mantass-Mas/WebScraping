@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using System.Net.Http;
+using Scraping.View;
 
 namespace Scraping.Model
 {
@@ -24,10 +25,20 @@ namespace Scraping.Model
         {
             var urlstring = @"http://yurinavi.com/yuri-calendar/";
             var document = default(IHtmlDocument);
-            using (var stream = client.GetStreamAsync(urlstring).Result)
+            try
             {
-                var parser = new HtmlParser();
-                document = parser.ParseDocumentAsync(stream).Result;
+                using (var stream = client.GetStreamAsync(urlstring).Result)
+                {
+                    var parser = new HtmlParser();
+                    document = parser.ParseDocumentAsync(stream).Result;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("GetWebData()でError");
+                var window = new ErrorDialog("インターネット接続でエラーが発生しました。\nインターネット接続を確認してください。");
+                bool? res = window.ShowDialog();
+                Environment.Exit(1);
             }
             var dates = document.QuerySelectorAll(@"td.column-1:not(#tablepress-152 > tbody > tr > td)");
             var books = document.QuerySelectorAll(@"td.column-3");

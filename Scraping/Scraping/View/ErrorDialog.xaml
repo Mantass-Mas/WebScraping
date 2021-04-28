@@ -1,0 +1,13 @@
+﻿<Window x:Class="Scraping.View.ErrorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Scraping.View"
+        mc:Ignorable="d"
+        Title="エラー" Height="250" Width="300" WindowStyle="ToolWindow">
+    <Grid>
+        <TextBlock x:Name="Error_Text" Text="" VerticalAlignment="Top" Margin="30,70" TextAlignment="Center" Height="80" TextWrapping="Wrap"/>
+        <Button Content="OK" Width="100" Height="20" VerticalAlignment="Bottom" Margin="20" Click="OK_Button_Click"/>
+    </Grid>
+</Window>
