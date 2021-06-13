@@ -14,7 +14,7 @@ namespace Scraping.Model
     /// </summary>
     public class DataBaseManager
     {
-        private static readonly string _fileName = @"favorite.splite3";
+        private static readonly string _fileName = @"favorite.sqlite3";
         private readonly string _connectionString;
 
         public DataBaseManager()
