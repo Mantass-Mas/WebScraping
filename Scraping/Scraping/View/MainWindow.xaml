@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:Scraping.View"
         mc:Ignorable="d"
         Closed="Window_Closed"
-        Title="百合漫画　発売日" Height="500" Width="900">
+        Title="百合漫画　発売日" Height="900" Width="1200">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
     </Window.Resources>
-    <ScrollViewer>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="viewStatus" 
@@ -63,8 +63,11 @@
                     Click="SearchCancel_Click"/>
             <DataGrid x:Name="dataGrid"
                       Margin="10"
+                      HorizontalAlignment="Left"
+                      HeadersVisibility="Column"
                       ItemsSource="{Binding ViewList}"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       SelectionUnit="Cell"
                       SelectedCellsChanged="dataGrid_SelectedCellsChanged"
                       BeginningEdit="DataGrid_BeginningEdit"
