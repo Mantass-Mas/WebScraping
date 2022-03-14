@@ -1,52 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Prism.Ioc;
+using Scraping.Views;
 using System.Windows;
-using Scraping.View;
 
 namespace Scraping
 {
     /// <summary>
-    /// App.xaml の相互作用ロジック
+    /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
-        // 重複起動チェック用
-        private static Mutex _mutex;
-
-        protected override void OnStartup(StartupEventArgs e)
+        protected override Window CreateShell()
         {
-            // 重複起動チェック
-            Console.WriteLine("重複起動チェック開始");
-            _mutex = new Mutex(false, "{E35BC3FC-BE3F-4AD3-BCD4-8950ACC4A747}");
-            if(!_mutex.WaitOne(0, false))
-            {
-                _mutex.Close();
-                _mutex = null;
-                Console.WriteLine("重複起動してる");
-                Shutdown();
-                return;
-            }
-
-            var window = new MainWindow();
-            window.Show();
+            return Container.Resolve<MainWindow>();
         }
 
-        protected override void OnExit(ExitEventArgs e)
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            if(_mutex == null)
-            {
-                return;
-            }
 
-            // ミューテックスの解放
-            _mutex.ReleaseMutex();
-            _mutex.Close();
-            _mutex = null;
         }
     }
 }
